@@ -1,5 +1,6 @@
 import LINE from '@auth/express/providers/line'
 import Google from '@auth/express/providers/google'
+import Facebook from '@auth/express/providers/facebook'
 
 export const authConfig = {
   trustHost: true,
@@ -8,5 +9,6 @@ export const authConfig = {
       checks: ['state'],
     }),
     Google,
+    Facebook
   ],
 }
