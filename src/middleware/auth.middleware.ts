@@ -1,11 +1,11 @@
-import { getSession } from "@auth/express"
-import { authConfig } from "../config/auth.config.js"
-import type { NextFunction, Request, Response } from "express"
+import { getSession } from '@auth/express'
+import { authConfig } from '../config/auth.config.js'
+import type { NextFunction, Request, Response } from 'express'
 
 export async function authenticatedUser(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const session =
     res.locals.session ?? (await getSession(req, authConfig)) ?? undefined
@@ -18,7 +18,7 @@ export async function authenticatedUser(
 export async function currentSession(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   const session = (await getSession(req, authConfig)) ?? undefined
   res.locals.session = session
