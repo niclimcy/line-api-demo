@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express'
 import crypto from 'crypto'
 import User from '../schemas/user.schema.js'
 import { authenticatedUser } from '../middleware/auth.middleware.js'
-import { sendMessage } from '../lib/lineMessage.js'
+import { followEventHandler, messageEventHandler, sendMessage } from '../lib/lineHelpers.js'
 
 const router = Router()
 
@@ -39,29 +39,9 @@ router.post('/webhook', (req: Request, res: Response) => {
     events.forEach(async (event) => {
       // check for follow event
       if (event.type == 'follow' && event.source?.userId) {
-        // Get user profile details
-        const getProfileReq = await fetch(
-          `https://api.line.me/v2/bot/profile/${event.source.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.MSG_LINE_ACCESS_TOKEN}`,
-            },
-          }
-        )
-        const profile = await getProfileReq.json()
-        const { userId, displayName } = profile
-
-        // Add user to db
-        try {
-          const existingUser = await User.findOne({ userId: userId })
-          // Only add new user if they do not exist
-          if (!existingUser) {
-            const user = new User({ userId, displayName })
-            await user.save()
-          }
-        } catch (error) {
-          console.error(error)
-        }
+        await followEventHandler(event)
+      } else if (event.type == 'message' && event.source?.userId) {
+        await messageEventHandler(event)
       }
     })
   }
