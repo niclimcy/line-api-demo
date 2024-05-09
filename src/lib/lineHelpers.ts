@@ -133,7 +133,6 @@ export async function sendMessage(
     to: recipientId,
     messages: messages,
   }
-  console.log(requestData)
 
   const headers = {
     'Content-Type': 'application/json',
