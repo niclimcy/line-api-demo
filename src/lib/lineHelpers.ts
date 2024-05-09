@@ -1,29 +1,26 @@
 import User from '../schemas/line.user.schema.js'
 import ChatHistory from '../schemas/chatHistory.schema.js'
 
-interface LineNewMessage {
-  type: string
-  text: string
-}
-
 interface LineProfile {
   userId: string
   displayName: string
 }
 
-const getUserProfile = async (userId: string): Promise<LineProfile | undefined> => {
+const getUserProfile = async (
+  userId: string
+): Promise<LineProfile | undefined> => {
   const response = await fetch(`https://api.line.me/v2/bot/profile/${userId}`, {
     headers: {
       Authorization: `Bearer ${process.env.MSG_LINE_ACCESS_TOKEN}`,
     },
-  });
+  })
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.statusText)
   }
 
-  return await response.json();
-};
+  return await response.json()
+}
 
 async function addLineUser(profile: LineProfile): Promise<boolean> {
   const { userId, displayName } = profile
@@ -81,8 +78,75 @@ export async function messageEventHandler(event: any): Promise<void> {
       await replyMessage(
         [
           {
-            type: 'text',
-            text: 'hi',
+            type: 'flex',
+            altText: 'Your Delivery Info',
+            contents: {
+              type: 'bubble',
+              header: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                  {
+                    type: 'text',
+                    text: 'DK Books',
+                    color: '#FFFFFF',
+                    weight: 'bold',
+                  },
+                ],
+              },
+              hero: {
+                type: 'image',
+                url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                size: 'xl',
+              },
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                  {
+                    type: 'text',
+                    text: 'Pending Delivery',
+                    size: 'xl',
+                    weight: 'bold',
+                    align: 'center',
+                  },
+                  {
+                    type: 'separator',
+                    margin: 'md',
+                  },
+                  {
+                    type: 'box',
+                    layout: 'vertical',
+                    contents: [
+                      {
+                        type: 'button',
+                        action: {
+                          type: 'uri',
+                          label: 'View delivery info',
+                          uri: 'https://example.com',
+                        },
+                        style: 'link',
+                      },
+                      {
+                        type: 'button',
+                        action: {
+                          type: 'uri',
+                          label: 'Visit our website',
+                          uri: 'https://liff.line.me/xxxxx-xxxxx/',
+                        },
+                        style: 'link',
+                      },
+                    ],
+                    paddingTop: '10px',
+                  },
+                ],
+              },
+              styles: {
+                header: {
+                  backgroundColor: '#00B900',
+                },
+              },
+            },
           },
         ],
         event.replyToken
@@ -92,7 +156,7 @@ export async function messageEventHandler(event: any): Promise<void> {
 }
 
 async function replyMessage(
-  messages: LineNewMessage[],
+  messages: any[],
   replyToken: string
 ): Promise<boolean> {
   const requestData = {
@@ -127,7 +191,7 @@ async function replyMessage(
 
 export async function sendMessage(
   recipientId: string,
-  messages: LineNewMessage[]
+  messages: any[]
 ): Promise<boolean> {
   const requestData = {
     to: recipientId,
