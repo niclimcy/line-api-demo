@@ -9,4 +9,10 @@ router.get('/', authenticatedUser, (req: Request, res: Response) => {
   }
 })
 
+router.get('/auth/signup', (req: Request, res: Response) => {
+  {
+    return res.render('signup', { error: '' })
+  }
+})
+
 export default router

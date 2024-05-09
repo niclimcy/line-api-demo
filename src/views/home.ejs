@@ -1,17 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
     <title>OpenID Test</title>
   </head>
   <body class="bg-gray-100 h-screen flex justify-center items-center">
     <div class="bg-white p-8 rounded-lg shadow-md">
       <h1 class="text-3xl font-bold mb-4 text-center">Book Store</h1>
       <% if (session) { %>
-      <h2>Logged in as <%= session.user.name %></h2>
-      <h2>Session expires <%= session.expires %></h2>
+      <h2>
+        Logged in as
+        <%= session.user.name %>
+      </h2>
+      <h2>
+        Session expires
+        <%= session.expires %>
+      </h2>
       <br />
       <a
         href="/chat"
@@ -28,9 +34,15 @@
       <% } else { %>
       <a
         href="/auth/signin"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block text-center w-full"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block text-center w-full mb-4"
       >
         Sign In
+      </a>
+      <a
+        href="/auth/signup"
+        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded inline-block text-center w-full"
+      >
+        Sign Up
       </a>
       <% } %>
     </div>

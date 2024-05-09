@@ -2,7 +2,11 @@ import { Router, Request, Response } from 'express'
 import crypto from 'crypto'
 import User from '../schemas/line.user.schema.js'
 import { authenticatedUser } from '../middleware/auth.middleware.js'
-import { followEventHandler, messageEventHandler, sendMessage } from '../lib/lineHelpers.js'
+import {
+  followEventHandler,
+  messageEventHandler,
+  sendMessage,
+} from '../lib/lineHelpers.js'
 import ChatHistory from '../schemas/chatHistory.schema.js'
 
 const router = Router()
@@ -48,29 +52,25 @@ router.post('/webhook', (req: Request, res: Response) => {
   }
 })
 
-router.get(
-  '/chat',
-  authenticatedUser,
-  async (req: Request, res: Response) => {
-    if (!res.locals?.session) return res.redirect('/')
+router.get('/chat', authenticatedUser, async (req: Request, res: Response) => {
+  if (!res.locals?.session) return res.redirect('/')
 
-    try {
-      const users = await User.find({})
-      return res.render('chat', {
-        users: users,
-        messageSent: false,
-        errorMessage: null,
-      })
-    } catch (error) {
-      console.error(error)
-      return res.render('chat', {
-        users: [],
-        messageSent: false,
-        errorMessage: null,
-      })
-    }
+  try {
+    const users = await User.find({})
+    return res.render('chat', {
+      users: users,
+      messageSent: false,
+      errorMessage: null,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.render('chat', {
+      users: [],
+      messageSent: false,
+      errorMessage: null,
+    })
   }
-)
+})
 
 router.post(
   '/send-message',
@@ -114,14 +114,14 @@ router.post(
 )
 
 // Get all messages
-router.get("/messages", async (req, res) => {
+router.get('/messages', async (req, res) => {
   try {
-    const chats = await ChatHistory.find({});
-    res.send(chats);
+    const chats = await ChatHistory.find({})
+    res.send(chats)
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    console.error(error)
+    res.status(500).send(error)
   }
-});
+})
 
 export default router
