@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import crypto from 'crypto'
-import User from '../schemas/user.schema.js'
+import User from '../schemas/line.user.schema.js'
 import { authenticatedUser } from '../middleware/auth.middleware.js'
 import { followEventHandler, messageEventHandler, sendMessage } from '../lib/lineHelpers.js'
 import ChatHistory from '../schemas/chatHistory.schema.js'

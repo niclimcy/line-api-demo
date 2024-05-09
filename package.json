@@ -14,9 +14,11 @@
   "description": "",
   "dependencies": {
     "@auth/express": "^0.5.4",
+    "@auth/mongodb-adapter": "^3.0.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "mongodb": "^6.6.1",
     "mongoose": "^8.3.4",
     "typescript": "^5.4.5"
   },

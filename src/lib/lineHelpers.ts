@@ -1,4 +1,4 @@
-import User from '../schemas/user.schema.js'
+import User from '../schemas/line.user.schema.js'
 import ChatHistory from '../schemas/chatHistory.schema.js'
 
 interface LineNewMessage {

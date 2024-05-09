@@ -6,7 +6,7 @@ import { ExpressAuth } from '@auth/express'
 import 'dotenv/config'
 import { authConfig } from './config/auth.config.js'
 import { currentSession } from './middleware/auth.middleware.js'
-import connectDB from './db.js'
+import { connectDB } from './db.js'
 import path from 'node:path'
 
 const PORT = 3000

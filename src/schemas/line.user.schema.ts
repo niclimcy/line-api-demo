@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 
-const userSchema = new Schema({
+const lineUserSchema = new Schema({
   userId: {
     type: String,
     required: true,
@@ -13,4 +13,4 @@ const userSchema = new Schema({
   },
 })
 
-export default mongoose.model('User', userSchema)
+export default mongoose.model('LineUser', lineUserSchema)
