@@ -27,7 +27,9 @@ export const authConfig = {
         let user = null
 
         // Find user by email
-        const userObj = await CredentialUser.findOne({ email: credentials.email })
+        const userObj = await CredentialUser.findOne({
+          email: credentials.email,
+        })
 
         if (userObj) {
           const validPass = await comparePassword(
