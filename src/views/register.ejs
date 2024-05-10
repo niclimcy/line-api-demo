@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      <h1 class="text-3xl font-bold mb-4 text-center">Register</h1>
+      <% if (error) { %>
+      <div
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+        role="alert"
+      >
+        <%= error %>
+      </div>
+      <% } %>
+      <form
+        id="signup-form"
+        action="/register-user"
+        method="POST"
+        class="space-y-4"
+      >
+        <div>
+          <label for="name" class="block font-medium text-gray-700">Name</label>
+          <input
+            value="<%= name %>"
+            type="text"
+            id="name"
+            name="name"
+            readonly
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label for="email" class="block font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            value="<%= email %>"
+            type="email"
+            id="email"
+            name="email"
+            readonly
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label for="address" class="block font-medium text-gray-700"
+            >Address</label
+          >
+          <textarea
+            id="address"
+            name="address"
+            class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+        <div>
+          <label for="otp" class="block font-medium text-gray-700">OTP</label>
+          <div class="grid grid-cols-3">
+            <input
+              type="text"
+              id="otp"
+              name="otp"
+              required
+              class="col-span-2 px-4 py-2 border border-gray-300 rounded-md rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="button"
+              id="get-otp"
+              class="col-span-1 px-4 py-2 rounded-l-none rounded-md transition-colors duration-300 bg-purple-500 hover:bg-purple-700 text-white font-bold disabled:bg-gray-400"
+            >
+              Get OTP <span id="countdown" class="hidden"></span>
+            </button>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Sign Up
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const getOtpBtn = document.getElementById('get-otp')
+      const otpInput = document.getElementById('otp')
+      const countdownSpan = document.getElementById('countdown')
+
+      let countdownTimer
+
+      const disableGetOtpBtn = () => {
+        getOtpBtn.disabled = true
+        countdownSpan.classList.remove('hidden')
+        let timeLeft = 30
+        countdownSpan.textContent = ` (${timeLeft}s)`
+
+        countdownTimer = setInterval(() => {
+          timeLeft--
+          countdownSpan.textContent = ` (${timeLeft}s)`
+
+          if (timeLeft === 0) {
+            clearInterval(countdownTimer)
+            getOtpBtn.disabled = false
+            countdownSpan.classList.add('hidden')
+            countdownSpan.textContent = ''
+          }
+        }, 1000)
+      }
+
+      getOtpBtn.addEventListener('click', async () => {
+        disableGetOtpBtn()
+
+        const email = document.getElementById('email').value
+        try {
+          const response = await fetch('/get-otp', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+          })
+          const { otp } = await response.json()
+          otpInput.value = otp
+        } catch (error) {
+          console.error('Error getting OTP:', error)
+          getOtpBtn.disabled = false
+          countdownSpan.classList.add('hidden')
+          countdownSpan.textContent = ''
+        }
+      })
+    </script>
+  </body>
+</html>

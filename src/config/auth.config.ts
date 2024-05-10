@@ -6,7 +6,8 @@ import { connectAuthDB } from '../db.js'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import { comparePassword } from '../lib/passwordHelpers.js'
 import { User } from '@auth/express'
-import CredentialUser from '../schemas/credential.user.schema.js'
+import CredentialUser from '../schemas/user.schema.js'
+import UserSchema from '../schemas/user.schema.js'
 
 const clientPromise = connectAuthDB()
 
@@ -32,6 +33,11 @@ export const authConfig = {
         })
 
         if (userObj) {
+          if (!userObj.password)
+          {
+            return null
+          }
+
           const validPass = await comparePassword(
             credentials.password as string,
             userObj.password

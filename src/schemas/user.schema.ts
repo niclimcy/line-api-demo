@@ -2,10 +2,7 @@ import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 
-// This schema is for those registering with password
-// TODO: decide on whether we should create a mega User schema for
-// users who have completed the registration flow with all their details
-const credentialUserSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -25,9 +22,17 @@ const credentialUserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
   },
+  address: {
+    type: String,
+    required: false,
+  },
+  registered: {
+    type: Boolean,
+    required: false,
+  }
 })
 
 // Save in the same collection as users created by authjs
-export default mongoose.model('User', credentialUserSchema)
+export default mongoose.model('User', userSchema)

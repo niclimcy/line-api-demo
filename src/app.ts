@@ -2,11 +2,11 @@ import express from 'express'
 import { NextFunction, Request, Response } from 'express'
 import indexRoute from './routes/index.js'
 import lineRoute from './routes/line.route.js'
-import signUpRoute from './routes/signup.route.js'
+import registerRoute from './routes/register.route.js'
 import { ExpressAuth } from '@auth/express'
 import 'dotenv/config'
 import { authConfig } from './config/auth.config.js'
-import { currentSession } from './middleware/auth.middleware.js'
+import { checkRegistration, currentSession } from './middleware/auth.middleware.js'
 import { connectDB } from './db.js'
 import path from 'node:path'
 
@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/', indexRoute)
 app.use('/', lineRoute)
-app.use('/', signUpRoute)
+app.use('/', registerRoute)
 
 // View engine setup
 app.set('views', path.join(import.meta.dirname, '/views'))
@@ -43,6 +43,9 @@ app.use(express.static(path.join(import.meta.dirname, '/public')))
 
 // connect to mongodb
 connectDB()
+
+// registration middleware
+app.use(checkRegistration)
 
 // start the Express server
 app.listen(PORT, () => {
