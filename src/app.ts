@@ -6,7 +6,7 @@ import registerRoute from './routes/register.route.js'
 import { ExpressAuth } from '@auth/express'
 import 'dotenv/config'
 import { authConfig } from './config/auth.config.js'
-import { checkRegistration, currentSession } from './middleware/auth.middleware.js'
+import { currentSession } from './middleware/auth.middleware.js'
 import { connectDB } from './db.js'
 import path from 'node:path'
 
@@ -43,9 +43,6 @@ app.use(express.static(path.join(import.meta.dirname, '/public')))
 
 // connect to mongodb
 connectDB()
-
-// registration middleware
-app.use(checkRegistration)
 
 // start the Express server
 app.listen(PORT, () => {
