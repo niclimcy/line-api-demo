@@ -15,3 +15,6 @@ benchmarks/graphs
 
 # .env variables should be ignored
 .env
+
+# ignore tailwind generated stylesheet
+src/public/styles.css
