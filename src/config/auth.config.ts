@@ -53,6 +53,6 @@ export const authConfig = {
   ],
   adapter: MongoDBAdapter(clientPromise),
   session: {
-    strategy: 'jwt' as 'jwt',
+    strategy: 'jwt' as const,
   },
 }
