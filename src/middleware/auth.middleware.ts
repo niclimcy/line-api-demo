@@ -24,3 +24,18 @@ export async function currentSession(
   res.locals.session = session
   return next()
 }
+
+export async function authorizationRequired(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const session =
+    res.locals.session ?? (await getSession(req, authConfig)) ?? undefined
+
+  res.locals.session = session
+
+  if (!session) return res.status(400).send('Unauthorized')
+
+  return next()
+}

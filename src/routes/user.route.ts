@@ -1,30 +1,28 @@
 import { Router, Request, Response } from 'express'
-import { authenticatedUser } from '../middleware/auth.middleware'
+import { authorizationRequired } from '../middleware/auth.middleware'
 import User from '../schemas/user.schema'
 import { Parser } from '@json2csv/plainjs'
 
 const router = Router()
 
-router.get('/users', authenticatedUser, async (req: Request, res: Response) => {
-  if (!res.locals?.session)
-    return res.status(400).send('[GET] /users Unauthorized')
-
-  try {
-    const users = await User.find({})
-    return res.status(200).send(users)
-  } catch (error) {
-    console.log(error)
-    return res.status(500)
+router.get(
+  '/users',
+  authorizationRequired,
+  async (req: Request, res: Response) => {
+    try {
+      const users = await User.find({})
+      return res.status(200).send(users)
+    } catch (error) {
+      console.log(error)
+      return res.status(500)
+    }
   }
-})
+)
 
 router.get(
   '/users/export',
-  authenticatedUser,
+  authorizationRequired,
   async (req: Request, res: Response) => {
-    if (!res.locals?.session)
-      return res.status(400).send('[GET] /users/export Unauthorized')
-
     try {
       const users = await User.find({})
       const fields = [
