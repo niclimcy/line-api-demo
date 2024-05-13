@@ -1,5 +1,5 @@
-import User from '../schemas/line.user.schema.js'
-import ChatHistory from '../schemas/chatHistory.schema.js'
+import User from '../schemas/line.user.schema'
+import ChatHistory from '../schemas/chatHistory.schema'
 
 interface LineProfile {
   userId: string

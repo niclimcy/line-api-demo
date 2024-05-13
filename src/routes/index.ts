@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
-import { authenticatedUser } from '../middleware/auth.middleware.js'
-import User from '../schemas/user.schema.js'
+import { authenticatedUser } from '../middleware/auth.middleware'
+import User from '../schemas/user.schema'
 
 const router = Router()
 

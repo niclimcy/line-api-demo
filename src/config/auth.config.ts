@@ -2,12 +2,11 @@ import LINE from '@auth/express/providers/line'
 import Google from '@auth/express/providers/google'
 import Facebook from '@auth/express/providers/facebook'
 import Credentials from '@auth/express/providers/credentials'
-import { connectAuthDB } from '../db.js'
+import { connectAuthDB } from '../db'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
-import { comparePassword } from '../lib/passwordHelpers.js'
+import { comparePassword } from '../lib/passwordHelpers'
 import { User } from '@auth/express'
-import CredentialUser from '../schemas/user.schema.js'
-import UserSchema from '../schemas/user.schema.js'
+import CredentialUser from '../schemas/user.schema'
 
 const clientPromise = connectAuthDB()
 

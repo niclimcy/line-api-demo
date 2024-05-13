@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
-import { authenticatedUser } from '../middleware/auth.middleware.js'
-import CredentialUser from '../schemas/user.schema.js'
-import { hashPassword } from '../lib/passwordHelpers.js'
+import { authenticatedUser } from '../middleware/auth.middleware'
+import CredentialUser from '../schemas/user.schema'
+import { hashPassword } from '../lib/passwordHelpers'
 
 const router = Router()
 
