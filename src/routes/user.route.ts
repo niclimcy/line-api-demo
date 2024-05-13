@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, type Request, type Response } from 'express'
 import { authorizationRequired } from '../middleware/auth.middleware'
 import User from '../schemas/user.schema'
 import { Parser } from '@json2csv/plainjs'

@@ -1,5 +1,4 @@
 import express from 'express'
-import { NextFunction, Request, Response } from 'express'
 import indexRoute from './routes/index'
 import lineRoute from './routes/line.route'
 import registerRoute from './routes/register.route'

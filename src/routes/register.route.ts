@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, type Request, type Response } from 'express'
 import { authenticatedUser } from '../middleware/auth.middleware'
 import CredentialUser from '../schemas/user.schema'
 import { hashPassword } from '../lib/passwordHelpers'
