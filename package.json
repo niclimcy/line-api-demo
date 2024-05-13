@@ -13,8 +13,8 @@
   "author": "",
   "description": "",
   "dependencies": {
-    "@auth/express": "^0.5.4",
-    "@auth/mongodb-adapter": "^3.0.0",
+    "@auth/express": "^0.5.5",
+    "@auth/mongodb-adapter": "^3.1.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
@@ -32,6 +32,6 @@
     "prettier": "3.2.5",
     "prettier-plugin-ejs": "^1.0.3",
     "tailwindcss": "^3.4.3",
-    "tsx": "^4.9.3"
+    "tsx": "^4.10.1"
   }
 }
