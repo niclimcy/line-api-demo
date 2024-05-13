@@ -25,12 +25,6 @@ app.use('/', userRoute)
 app.set('views', path.join(import.meta.dirname, '/views'))
 app.set('view engine', 'ejs')
 
-// Global error handling
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack)
-  res.status(500).send('Something broke!')
-})
-
 // If app is served through a proxy, trust the proxy to allow HTTPS protocol to be detected
 app.set('trust proxy', true)
 
