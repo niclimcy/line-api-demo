@@ -31,7 +31,7 @@ const userSchema = new Schema({
   registered: {
     type: Boolean,
     required: false,
-  }
+  },
 })
 
 // Save in the same collection as users created by authjs

@@ -6,18 +6,17 @@ const router = Router()
 
 router.get('/', authenticatedUser, async (req: Request, res: Response) => {
   {
-    if (res.locals.session && res.locals.session.user.email)
-    {
-      const email = res.locals.session.user.email;
+    if (res.locals.session && res.locals.session.user.email) {
+      const email = res.locals.session.user.email
 
       try {
         // Find the user by email
-        const user = await User.findOne({ email });
-  
+        const user = await User.findOne({ email })
+
         // Check if the user is registered
         if (user && !user.registered) {
           // If the user is not registered, redirect to the registration page
-          return res.redirect('/auth/register');
+          return res.redirect('/auth/register')
         }
       } catch (error) {
         console.log(error)

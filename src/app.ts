@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import indexRoute from './routes/index.js'
 import lineRoute from './routes/line.route.js'
 import registerRoute from './routes/register.route.js'
+import userRoute from './routes/user.route.js'
 import { ExpressAuth } from '@auth/express'
 import 'dotenv/config'
 import { authConfig } from './config/auth.config.js'
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/', indexRoute)
 app.use('/', lineRoute)
 app.use('/', registerRoute)
+app.use('/', userRoute)
 
 // View engine setup
 app.set('views', path.join(import.meta.dirname, '/views'))

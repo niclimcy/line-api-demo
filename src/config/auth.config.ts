@@ -33,8 +33,7 @@ export const authConfig = {
         })
 
         if (userObj) {
-          if (!userObj.password)
-          {
+          if (!userObj.password) {
             return null
           }
 
