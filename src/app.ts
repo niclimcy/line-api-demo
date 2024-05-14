@@ -1,14 +1,16 @@
 import express from 'express'
+import { ExpressAuth } from '@auth/express'
+import 'dotenv/config'
+import path from 'node:path'
+
+import { authConfig } from './config/auth.config'
+import { currentSession } from './middleware/auth.middleware'
+import { connectDB } from './db'
 import indexRoute from './routes/index'
 import lineRoute from './routes/line.route'
 import registerRoute from './routes/register.route'
 import userRoute from './routes/user.route'
-import { ExpressAuth } from '@auth/express'
-import 'dotenv/config'
-import { authConfig } from './config/auth.config'
-import { currentSession } from './middleware/auth.middleware'
-import { connectDB } from './db'
-import path from 'node:path'
+import uploadRoute from './routes/upload.route'
 
 const PORT = 3000
 const app = express()
@@ -19,6 +21,7 @@ app.use('/', indexRoute)
 app.use('/', lineRoute)
 app.use('/', registerRoute)
 app.use('/', userRoute)
+app.use('/', uploadRoute)
 
 // View engine setup
 app.set('views', path.join(import.meta.dirname, '/views'))

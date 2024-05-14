@@ -18,3 +18,6 @@ benchmarks/graphs
 
 # ignore tailwind generated stylesheet
 src/public/styles.css
+
+# ignore uploads
+uploads/*
