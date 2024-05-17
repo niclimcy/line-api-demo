@@ -2,10 +2,12 @@ import express from 'express'
 import { ExpressAuth } from '@auth/express'
 import 'dotenv/config'
 import path from 'node:path'
+import { createServer } from 'node:http'
 
 import { authConfig } from './config/auth.config'
 import { currentSession } from './middleware/auth.middleware'
 import { connectDB } from './db'
+import { handleWS } from './ws'
 import indexRoute from './routes/index'
 import lineRoute from './routes/line.route'
 import registerRoute from './routes/register.route'
@@ -14,6 +16,7 @@ import uploadRoute from './routes/upload.route'
 
 const PORT = 3000
 const app = express()
+const httpServer = createServer(app)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -42,7 +45,10 @@ app.use(express.static(path.join(import.meta.dirname, '/public')))
 // connect to mongodb
 connectDB()
 
+// handle socketio connections
+handleWS(httpServer)
+
 // start the Express server
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server running: http://localhost:${PORT}`)
 })

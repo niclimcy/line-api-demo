@@ -52,25 +52,29 @@ router.post('/webhook', (req: Request, res: Response) => {
   }
 })
 
-router.get('/chat', authenticatedUser, async (req: Request, res: Response) => {
-  if (!res.locals?.session) return res.redirect('/')
+router.get(
+  '/linechat',
+  authenticatedUser,
+  async (req: Request, res: Response) => {
+    if (!res.locals?.session) return res.redirect('/')
 
-  try {
-    const users = await User.find({})
-    return res.render('chat', {
-      users: users,
-      messageSent: false,
-      errorMessage: null,
-    })
-  } catch (error) {
-    console.error(error)
-    return res.render('chat', {
-      users: [],
-      messageSent: false,
-      errorMessage: null,
-    })
+    try {
+      const users = await User.find({})
+      return res.render('linechat', {
+        users: users,
+        messageSent: false,
+        errorMessage: null,
+      })
+    } catch (error) {
+      console.error(error)
+      return res.render('linechat', {
+        users: [],
+        messageSent: false,
+        errorMessage: null,
+      })
+    }
   }
-})
+)
 
 router.post(
   '/send-message',
@@ -91,12 +95,12 @@ router.post(
       ])
 
       if (messageSent) {
-        return res.render('chat', {
+        return res.render('linechat', {
           users: await User.find({}),
           messageSent: true,
         })
       } else {
-        return res.render('chat', {
+        return res.render('linechat', {
           users: await User.find({}),
           messageSent: false,
           errorMessage: 'An error occurred while sending the message.',
@@ -104,7 +108,7 @@ router.post(
       }
     } catch (error) {
       console.error(error)
-      return res.render('chat', {
+      return res.render('linechat', {
         users: await User.find({}),
         messageSent: false,
         errorMessage: 'An error occurred while sending the message.',

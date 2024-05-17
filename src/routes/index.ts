@@ -34,4 +34,10 @@ router.get('/auth/signup', (req: Request, res: Response) => {
   }
 })
 
+router.get('/chat', authenticatedUser, async (req: Request, res: Response) => {
+  {
+    return res.render('chat')
+  }
+})
+
 export default router
