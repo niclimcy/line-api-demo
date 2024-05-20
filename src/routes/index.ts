@@ -36,6 +36,8 @@ router.get('/auth/signup', (req: Request, res: Response) => {
 
 router.get('/chat', authenticatedUser, async (req: Request, res: Response) => {
   {
+    if (!res.locals?.session) return res.redirect('/')
+
     return res.render('chat')
   }
 })
