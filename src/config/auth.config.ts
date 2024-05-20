@@ -23,7 +23,7 @@ export const authConfig = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      authorize: async (credentials, request) => {
+      authorize: async (credentials) => {
         let user = null
 
         // Find user by email

@@ -6,12 +6,12 @@ export function connectDB() {
 
   try {
     mongoose.connect(url)
-  } catch (err: any) {
-    console.error(err.message)
+  } catch (err: unknown) {
+    console.error(err)
     process.exit(1)
   }
   const dbConnection = mongoose.connection
-  dbConnection.once('open', (_) => {
+  dbConnection.once('open', () => {
     console.log(`Database connected: ${url}`)
   })
 

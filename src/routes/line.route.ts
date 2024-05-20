@@ -1,56 +1,10 @@
 import { Router, type Request, type Response } from 'express'
-import crypto from 'crypto'
 import User from '../schemas/line.user.schema'
 import { authenticatedUser } from '../middleware/auth.middleware'
-import {
-  followEventHandler,
-  messageEventHandler,
-  sendMessage,
-} from '../lib/lineHelpers'
+import { lineClient } from '../middleware/line.middleware'
 import ChatHistory from '../schemas/chatHistory.schema'
 
 const router = Router()
-
-router.post('/webhook', (req: Request, res: Response) => {
-  {
-    const channelSecret = process.env.MSG_LINE_SECRET
-    if (!channelSecret) {
-      console.log('Missing MSG_LINE_SECRET in env')
-      return
-    }
-    const body = JSON.stringify(req.body)
-    const signature = crypto
-      .createHmac('SHA256', channelSecret)
-      .update(body)
-      .digest('base64')
-
-    // Compare x-line-signature request header and the signature
-    const headerSignature = req.headers['x-line-signature']
-    if (!headerSignature) {
-      res.status(400).send('Missing x-line-signature header')
-      return
-    }
-
-    if (signature !== headerSignature) {
-      res.status(400).send('Invalid signature')
-      return
-    }
-
-    // Signature is valid, handle the request
-    res.status(200).send('OK')
-
-    // Loop through all events
-    const events: Array<any> = req.body.events
-    events.forEach(async (event) => {
-      // check for follow event
-      if (event.type == 'follow' && event.source?.userId) {
-        await followEventHandler(event)
-      } else if (event.type == 'message' && event.source?.userId) {
-        await messageEventHandler(event)
-      }
-    })
-  }
-})
 
 router.get(
   '/linechat',
@@ -87,14 +41,19 @@ router.post(
 
     try {
       // Send the message...
-      const messageSent = await sendMessage(recipient, [
-        {
-          type: 'text',
-          text: message,
-        },
-      ])
+      const client = lineClient()
 
-      if (messageSent) {
+      const messageSent = await client.pushMessage({
+        to: recipient,
+        messages: [
+          {
+            type: 'text',
+            text: message,
+          },
+        ],
+      })
+
+      if (messageSent.sentMessages.length > 0) {
         return res.render('linechat', {
           users: await User.find({}),
           messageSent: true,

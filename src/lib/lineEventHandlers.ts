@@ -1,28 +1,23 @@
 import User from '../schemas/line.user.schema'
 import ChatHistory from '../schemas/chatHistory.schema'
-
-interface LineProfile {
-  userId: string
-  displayName: string
-}
+import type { FollowEvent, MessageEvent } from '@line/bot-sdk'
+import type { UserProfileResponse } from '@line/bot-sdk/dist/messaging-api/api'
+import { lineClient } from '../middleware/line.middleware'
 
 const getUserProfile = async (
   userId: string
-): Promise<LineProfile | undefined> => {
-  const response = await fetch(`https://api.line.me/v2/bot/profile/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.MSG_LINE_ACCESS_TOKEN}`,
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(response.statusText)
+): Promise<UserProfileResponse | undefined> => {
+  const client = lineClient()
+  try {
+    const profile = await client.getProfile(userId)
+    return profile
+  } catch (error: unknown) {
+    console.log(error)
+    return
   }
-
-  return await response.json()
 }
 
-async function addLineUser(profile: LineProfile): Promise<boolean> {
+async function addLineUser(profile: UserProfileResponse): Promise<boolean> {
   const { userId, displayName } = profile
 
   // Add user to db
@@ -41,18 +36,18 @@ async function addLineUser(profile: LineProfile): Promise<boolean> {
   }
 }
 
-export async function followEventHandler(event: any): Promise<void> {
+export async function followEventHandler(event: FollowEvent): Promise<void> {
   // Get user profile details
-  const profile = await getUserProfile(event.source.userId)
+  const profile = await getUserProfile(event.source?.userId ?? '')
   if (!profile) return
 
   // Add line user if does not exist yet
   await addLineUser(profile)
 }
 
-export async function messageEventHandler(event: any): Promise<void> {
+export async function messageEventHandler(event: MessageEvent): Promise<void> {
   // Get user profile details
-  const profile = await getUserProfile(event.source.userId)
+  const profile = await getUserProfile(event.source?.userId ?? '')
   if (!profile) return
 
   // Add line user if does not exist yet
@@ -75,8 +70,11 @@ export async function messageEventHandler(event: any): Promise<void> {
 
     // reply message example
     if (text == 'hello') {
-      await replyMessage(
-        [
+      const client = lineClient()
+
+      await client.replyMessage({
+        replyToken: event.replyToken,
+        messages: [
           {
             type: 'flex',
             altText: 'Your Delivery Info',
@@ -149,76 +147,7 @@ export async function messageEventHandler(event: any): Promise<void> {
             },
           },
         ],
-        event.replyToken
-      )
+      })
     }
-  }
-}
-
-async function replyMessage(
-  messages: any[],
-  replyToken: string
-): Promise<boolean> {
-  const requestData = {
-    replyToken: replyToken,
-    messages: messages,
-  }
-
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${process.env.MSG_LINE_ACCESS_TOKEN}`,
-  }
-
-  try {
-    const response = await fetch('https://api.line.me/v2/bot/message/reply', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(requestData),
-    })
-
-    if (response.ok) {
-      return true
-    } else {
-      const errorData = await response.json()
-      console.error('Error sending message:', errorData)
-      return false
-    }
-  } catch (error) {
-    console.error('Error sending message:', error)
-    return false
-  }
-}
-
-export async function sendMessage(
-  recipientId: string,
-  messages: any[]
-): Promise<boolean> {
-  const requestData = {
-    to: recipientId,
-    messages: messages,
-  }
-
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${process.env.MSG_LINE_ACCESS_TOKEN}`,
-  }
-
-  try {
-    const response = await fetch('https://api.line.me/v2/bot/message/push', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(requestData),
-    })
-
-    if (response.ok) {
-      return true
-    } else {
-      const errorData = await response.json()
-      console.error('Error sending message:', errorData)
-      return false
-    }
-  } catch (error) {
-    console.error('Error sending message:', error)
-    return false
   }
 }

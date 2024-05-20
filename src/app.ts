@@ -10,6 +10,7 @@ import { connectDB } from './db'
 import { handleWS } from './ws'
 import indexRoute from './routes/index'
 import lineRoute from './routes/line.route'
+import lineWebhookRoute from './routes/line.webhook.route'
 import registerRoute from './routes/register.route'
 import userRoute from './routes/user.route'
 import uploadRoute from './routes/upload.route'
@@ -18,6 +19,7 @@ const PORT = 3000
 const app = express()
 const httpServer = createServer(app)
 
+app.use('/webhook', lineWebhookRoute)
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/', indexRoute)
