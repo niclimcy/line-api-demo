@@ -9,6 +9,7 @@
     <div class="flex items-end m-0 font-sans bg-gray-50 min-h-[calc(100dvh)]">
       <div class="flex flex-col justify-end w-full">
         <div
+          id="messagesContainer"
           class="w-full mx-auto p-4 overflow-y-auto overscroll-contain max-h-[80vh]"
         >
           <ul id="messages" class="list-none m-0 p-0 space-y-4">
@@ -40,6 +41,7 @@
       const form = document.getElementById('form')
       const input = document.getElementById('input')
       const messages = document.getElementById('messages')
+      const messagesContainer = document.getElementById('messagesContainer')
 
       form.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -60,7 +62,7 @@
         timestamp.className = 'text-xs text-gray-500 absolute bottom-0 right-2'
         item.appendChild(timestamp)
         messages.appendChild(item)
-        window.scrollTo(0, document.body.scrollHeight)
+        messagesContainer.scrollTop = messagesContainer.scrollHeight
       })
     </script>
   </body>
