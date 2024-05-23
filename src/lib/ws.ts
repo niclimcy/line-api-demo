@@ -2,7 +2,7 @@ import { Server as WSServer } from 'socket.io'
 import type { Server, IncomingMessage } from 'node:http'
 import { getSession } from '@auth/express'
 import { Request } from 'express'
-import { authConfig } from './config/auth.config'
+import { authConfig } from '../config/auth.config'
 
 function mapToExpressReq(request: IncomingMessage): Request {
   return { headers: request.headers, protocol: 'http' } as Request

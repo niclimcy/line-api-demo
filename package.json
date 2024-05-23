@@ -24,6 +24,7 @@
     "mongodb": "^6.6.2",
     "mongoose": "^8.4.0",
     "multer": "1.4.5-lts.1",
+    "p-limit": "^5.0.0",
     "papaparse": "^5.4.1",
     "socket.io": "^4.7.5",
     "typescript": "^5.4.5"
@@ -41,7 +42,7 @@
     "prettier": "3.2.5",
     "prettier-plugin-ejs": "^1.0.3",
     "tailwindcss": "^3.4.3",
-    "tsx": "^4.10.5",
+    "tsx": "^4.11.0",
     "typescript-eslint": "^7.10.0"
   },
   "packageManager": "pnpm@9.1.2+sha256.19c17528f9ca20bd442e4ca42f00f1b9808a9cb419383cd04ba32ef19322aba7"

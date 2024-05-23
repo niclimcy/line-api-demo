@@ -6,6 +6,7 @@ import {
 import crypto from 'node:crypto'
 import multer from 'multer'
 import mime from 'mime'
+import { uploadImages } from '../lib/cloudinary'
 
 const router = Router()
 
@@ -70,10 +71,21 @@ router.post(
 router.post(
   '/upload-img',
   authorizationRequired,
-  (req: Request, res: Response) => {
-    imgUpload(req, res, function (err) {
-      if (err) {
-        return res.redirect(`/upload?error=${err.message}`)
+  async (req: Request, res: Response) => {
+    imgUpload(req, res, async function (err) {
+      if (err || !req?.files) {
+        const message = err.message ?? 'No file uploaded'
+        return res.redirect(`/upload?error=${message}`)
+      }
+
+      let files: string[] = []
+
+      if (req.files instanceof Array) {
+        files = req.files.map((f) => f.path)
+      }
+
+      if (files.length > 0) {
+        await Promise.all(uploadImages(files))
       }
 
       return res.redirect('/upload?uploaded=true')
