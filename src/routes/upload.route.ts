@@ -1,4 +1,4 @@
-import { Router, type Response } from 'express'
+import { Router, type Response, type Request } from 'express'
 import {
   authorizationRequired,
   authenticatedUser,
@@ -9,9 +9,18 @@ import mime from 'mime'
 
 const router = Router()
 
-const csvStorage = multer.diskStorage({
+const localStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/csv/')
+    if (file.mimetype === 'text/csv') {
+      cb(null, './uploads/csv/')
+    } else if (
+      file.mimetype === 'image/png' ||
+      file.mimetype === 'image/jpeg'
+    ) {
+      cb(null, './uploads/img/')
+    }
+
+    cb(null, './uploads/')
   },
   filename: function (req, file, cb) {
     crypto.pseudoRandomBytes(8, function (err, raw) {
@@ -23,7 +32,7 @@ const csvStorage = multer.diskStorage({
 })
 
 const csvUpload = multer({
-  storage: csvStorage,
+  storage: localStorage,
   fileFilter: (_, file, cb) => {
     if (file.mimetype === 'text/csv') {
       cb(null, true)
@@ -31,23 +40,10 @@ const csvUpload = multer({
       cb(new Error('Invalid file type'))
     }
   },
-})
-
-const imgStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads/img/')
-  },
-  filename: function (req, file, cb) {
-    crypto.pseudoRandomBytes(8, function (err, raw) {
-      if (err) cb(err, file.fieldname)
-
-      cb(null, `${raw.toString('hex')}.${mime.getExtension(file.mimetype)}`)
-    })
-  },
-})
+}).single('csv')
 
 const imgUpload = multer({
-  storage: imgStorage,
+  storage: localStorage,
   fileFilter: (_, file, cb) => {
     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
       cb(null, true)
@@ -55,31 +51,44 @@ const imgUpload = multer({
       cb(new Error('Invalid file type'))
     }
   },
-})
+}).array('images')
 
 router.post(
   '/upload-csv',
   authorizationRequired,
-  csvUpload.single('csv'),
-  (_, res: Response) => {
-    return res.render('upload', { uploaded: true, error: '' })
+  (req: Request, res: Response) => {
+    csvUpload(req, res, function (err) {
+      if (err) {
+        return res.redirect(`/upload?error=${err.message}`)
+      }
+
+      return res.redirect('/upload?uploaded=true')
+    })
   }
 )
 
 router.post(
   '/upload-img',
   authorizationRequired,
-  imgUpload.array('images'),
-  (_, res: Response) => {
-    return res.render('upload', { uploaded: true, error: '' })
+  (req: Request, res: Response) => {
+    imgUpload(req, res, function (err) {
+      if (err) {
+        return res.redirect(`/upload?error=${err.message}`)
+      }
+
+      return res.redirect('/upload?uploaded=true')
+    })
   }
 )
 
-router.get('/upload', authenticatedUser, (_, res: Response) => {
+router.get('/upload', authenticatedUser, (req: Request, res: Response) => {
   {
     if (!res.locals?.session) return res.redirect('/')
 
-    return res.render('upload', { uploaded: false, error: '' })
+    const uploaded = req.query?.uploaded ?? false
+    const error = req.query?.error ?? ''
+
+    return res.render('upload', { uploaded, error })
   }
 })
 
