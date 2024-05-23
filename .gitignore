@@ -22,3 +22,6 @@ src/public/styles.css
 # ignore uploads
 uploads/csv/*
 uploads/img/*
+
+# ignore build
+dist

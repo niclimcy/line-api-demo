@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc & tailwindcss -i ./tailwind.css -o ./src/public/styles.css",
+    "build": "tsc & tailwindcss -i ./tailwind.css -o ./dist/public/styles.css",
     "dev": "tsx watch --env-file=.env ./src/app.ts & tailwindcss -i ./tailwind.css -o ./src/public/styles.css -w",
     "format": "prettier ./src --write",
     "lint": "eslint ./src"
