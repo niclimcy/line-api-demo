@@ -29,6 +29,9 @@ importers:
       express:
         specifier: ^4.19.2
         version: 4.19.2
+      mime:
+        specifier: ^4.0.3
+        version: 4.0.3
       mongodb:
         specifier: ^6.6.2
         version: 6.6.2
@@ -1155,6 +1158,11 @@ packages:
   mime@1.6.0:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
+    hasBin: true
+
+  mime@4.0.3:
+    resolution: {integrity: sha512-KgUb15Oorc0NEKPbvfa0wRU+PItIEZmiv+pyAO2i0oTIVTJhlzMclU7w4RXWQrSOVH5ax/p/CkIO7KI4OyFJTQ==}
+    engines: {node: '>=16'}
     hasBin: true
 
   minimatch@3.1.2:
@@ -2909,6 +2917,8 @@ snapshots:
       mime-db: 1.52.0
 
   mime@1.6.0: {}
+
+  mime@4.0.3: {}
 
   minimatch@3.1.2:
     dependencies:

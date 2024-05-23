@@ -20,4 +20,5 @@ benchmarks/graphs
 src/public/styles.css
 
 # ignore uploads
-uploads/*
+uploads/csv/*
+uploads/img/*

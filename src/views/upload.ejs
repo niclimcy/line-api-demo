@@ -4,14 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Upload</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-    />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-      <h1 class="text-3xl font-bold mb-4 text-center">Upload CSV</h1>
       <% if (uploaded) { %>
       <div
         class="bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md mb-4"
@@ -44,6 +40,7 @@
         <%= error %>
       </div>
       <% } %>
+      <h1 class="text-3xl font-bold mb-4 text-center">Upload csv</h1>
       <form
         action="/upload-csv"
         method="POST"
@@ -57,10 +54,44 @@
               for="csvFile"
               class="cursor-pointer bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
             >
-              Choose File
+              Choose CSV
             </label>
             <span id="file-chosen" class="ml-3 text-gray-600"
-              >No file chosen</span
+              >No csv chosen</span
+            >
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Upload
+        </button>
+      </form>
+      <h1 class="text-3xl font-bold mt-8 mb-4 text-center">Upload Images</h1>
+      <form
+        action="/upload-img"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-4"
+      >
+        <div>
+          <div class="mt-1 flex items-center">
+            <input
+              type="file"
+              id="imageFiles"
+              name="images"
+              class="hidden"
+              multiple
+            />
+            <label
+              for="imageFiles"
+              class="cursor-pointer bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            >
+              Choose Images
+            </label>
+            <span id="images-chosen" class="ml-3 text-gray-600"
+              >No images chosen</span
             >
           </div>
         </div>
@@ -80,6 +111,16 @@
         fileChosen.textContent = this.files[0]
           ? this.files[0].name
           : 'No file chosen'
+      })
+
+      const imageInput = document.getElementById('imageFiles')
+      const imagesChosen = document.getElementById('images-chosen')
+
+      imageInput.addEventListener('change', function () {
+        const files = Array.from(this.files)
+        imagesChosen.textContent = files.length
+          ? files.map((file) => file.name).join(', ')
+          : 'No images chosen'
       })
     </script>
   </body>
