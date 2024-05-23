@@ -18,9 +18,9 @@ const localStorage = multer.diskStorage({
       file.mimetype === 'image/jpeg'
     ) {
       cb(null, './uploads/img/')
+    } else {
+      cb(null, './uploads/')
     }
-
-    cb(null, './uploads/')
   },
   filename: function (req, file, cb) {
     crypto.pseudoRandomBytes(8, function (err, raw) {
