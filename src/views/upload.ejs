@@ -25,9 +25,21 @@
               />
             </svg>
           </div>
-          <div>
+          <div class="w-full">
             <p class="font-bold">File Uploaded!</p>
-            <p class="text-sm">Your file has been uploaded.</p>
+            <% if (Array.isArray(uploaded) && uploaded.length > 0) { %>
+            <% uploaded.forEach(function(link) { %>
+            <a
+              href="<%= link %>"
+              class="text-sm break-all underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+              ><%= link %>
+            </a>
+            <br />
+            <br />
+            <% }) %>
+            <% } else if (typeof uploaded === 'string') { %>
+            <p class="text-sm"><%= uploaded %></p>
+            <% } %>
           </div>
         </div>
       </div>

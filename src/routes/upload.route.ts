@@ -60,10 +60,11 @@ router.post(
   (req: Request, res: Response) => {
     csvUpload(req, res, function (err) {
       if (err) {
-        return res.redirect(`/upload?error=${err.message}`)
+        return res.redirect(`/upload?error=${encodeURI(err.message)}`)
       }
 
-      return res.redirect('/upload?uploaded=true')
+      const message = encodeURI('Your file has been uploaded.')
+      return res.redirect(`/upload?uploaded=${message}`)
     })
   }
 )
@@ -74,7 +75,7 @@ router.post(
   async (req: Request, res: Response) => {
     imgUpload(req, res, async function (err) {
       if (err || !req?.files) {
-        const message = err.message ?? 'No file uploaded'
+        const message = encodeURI(err.message ?? 'No file uploaded.')
         return res.redirect(`/upload?error=${message}`)
       }
 
@@ -84,24 +85,36 @@ router.post(
         files = req.files.map((f) => f.path)
       }
 
+      let message = 'Your file has been uploaded.'
+
       if (files.length > 0) {
-        await Promise.all(uploadImages(files))
+        const uploads = await Promise.all(uploadImages(files))
+        message = uploads.map((image) => image.secure_url).join(',')
       }
 
-      return res.redirect('/upload?uploaded=true')
+      return res.redirect(`/upload?uploaded=${encodeURI(message)}`)
     })
   }
 )
 
 router.get('/upload', authenticatedUser, (req: Request, res: Response) => {
-  {
-    if (!res.locals?.session) return res.redirect('/')
+  if (!res.locals?.session) return res.redirect('/')
 
-    const uploaded = req.query?.uploaded ?? false
-    const error = req.query?.error ?? ''
+  let uploaded = req.query?.uploaded ?? false
+  let error = req.query?.error ?? false
 
-    return res.render('upload', { uploaded, error })
+  if (typeof uploaded === 'string') {
+    uploaded = decodeURI(uploaded)
+    if (uploaded.includes('https')) {
+      uploaded = uploaded.split(',')
+    }
   }
+
+  if (typeof error === 'string') {
+    error = decodeURI(error)
+  }
+
+  return res.render('upload', { uploaded, error })
 })
 
 export default router
