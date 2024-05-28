@@ -1,0 +1,27 @@
+# npm
+node_modules
+*.log
+*.gz
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore
+
+# .env variables should be ignored
+.env
+
+# ignore tailwind generated stylesheet
+src/public/styles.css
+
+# ignore uploads
+uploads/csv/*
+uploads/img/*
+
+# ignore build
+dist
