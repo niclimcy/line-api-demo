@@ -21,6 +21,7 @@ import { LineUser } from "@/lib/types";
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
 import { SubmitButton } from "./submit-btn";
+import { SiLine } from "@icons-pack/react-simple-icons";
 
 type LineFormProps = {
   users: LineUser[];
@@ -45,7 +46,11 @@ export function LineForm(props: LineFormProps) {
   return (
     <Card className="w-1/2">
       <CardHeader>
-        <CardTitle>Send LINE Message</CardTitle>
+        <CardTitle className="text-center">
+          <SiLine className="size-10 w-full" />
+          <br />
+          Send LINE Message
+        </CardTitle>
       </CardHeader>
       <form action={formAction} ref={formRef}>
         <CardContent className="space-y-2">
