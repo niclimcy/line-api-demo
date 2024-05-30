@@ -15,12 +15,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { sendMessage } from "@/app/actions";
 import { LineUser } from "@/lib/types";
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
+import { SubmitButton } from "./submit-btn";
 
 type LineFormProps = {
   users: LineUser[];
@@ -33,7 +33,6 @@ const initialState = {
 };
 
 export function LineForm(props: LineFormProps) {
-  const { pending } = useFormStatus();
   const [formState, formAction] = useFormState(sendMessage, initialState);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -72,9 +71,7 @@ export function LineForm(props: LineFormProps) {
           <Textarea name="message" placeholder="Type your message here." />
         </CardContent>
         <CardFooter>
-          <Button type="submit" aria-disabled={pending}>
-            Send message
-          </Button>
+          <SubmitButton>Send message</SubmitButton>
         </CardFooter>
       </form>
     </Card>
