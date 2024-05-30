@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express'
 import { authorizationRequired } from '../middleware/auth.middleware'
 import User from '../schemas/user.schema'
+import LineUser from '../schemas/line.user.schema'
 import Papa from 'papaparse'
 
 const router = Router()
@@ -26,6 +27,15 @@ router.get(
     return res.status(200).send(users)
   }
 )
+
+router.get('/users/line', async (req: Request, res: Response) => {
+  try {
+    const users = await LineUser.find({})
+    return res.status(200).send(users)
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch users' })
+  }
+})
 
 router.get(
   '/users/export',

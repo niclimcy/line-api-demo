@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -7,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,11 +18,12 @@ export default function Home() {
           <CardDescription>Card Description</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Card Content</p>
+          <h1 className="text-lg font-semibold">Actions</h1>
+          <Button asChild variant="outline">
+            <Link href="/line-chat">Message LINE users</Link>
+          </Button>
         </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
+        <CardFooter>Card Footer</CardFooter>
       </Card>
     </main>
   );
