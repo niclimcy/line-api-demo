@@ -1,6 +1,6 @@
 "use server";
 
-export async function sendMessage(formData: FormData) {
+export async function sendMessage(prevState: any, formData: FormData) {
   const rawFormData = {
     recipient: formData.get("recipient"),
     message: formData.get("message"),
@@ -16,10 +16,16 @@ export async function sendMessage(formData: FormData) {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to send message");
+    return {
+      success: false,
+      message: "Message not sent!",
+      resetKey: Date.now().toString(),
+    };
   }
 
   return {
+    success: true,
     message: "Message sent!",
+    resetKey: Date.now().toString(),
   };
 }
