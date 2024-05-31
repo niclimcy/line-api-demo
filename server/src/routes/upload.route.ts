@@ -69,33 +69,30 @@ router.post(
   }
 )
 
-router.post(
-  '/upload-img',
-  authorizationRequired,
-  async (req: Request, res: Response) => {
-    imgUpload(req, res, async function (err) {
-      if (err || !req?.files) {
-        const message = encodeURI(err.message ?? 'No file uploaded.')
-        return res.redirect(`/upload?error=${message}`)
-      }
+router.post('/upload-img', async (req: Request, res: Response) => {
+  imgUpload(req, res, async function (err) {
+    if (err || !req?.files) {
+      const message = encodeURI(err.message ?? 'No file uploaded.')
+      console.log(err)
+      return res.status(400).send({ message })
+    }
 
-      let files: string[] = []
+    let files: string[] = []
 
-      if (req.files instanceof Array) {
-        files = req.files.map((f) => f.path)
-      }
+    if (req.files instanceof Array) {
+      files = req.files.map((f) => f.path)
+    }
 
-      let message = 'Your file has been uploaded.'
+    let message = 'Your file has been uploaded.'
 
-      if (files.length > 0) {
-        const uploads = await Promise.all(uploadImages(files))
-        message = uploads.map((image) => image.secure_url).join(',')
-      }
+    if (files.length > 0) {
+      const uploads = await Promise.all(uploadImages(files))
+      message = uploads.map((image) => image.secure_url).join(',')
+    }
 
-      return res.redirect(`/upload?uploaded=${encodeURI(message)}`)
-    })
-  }
-)
+    return res.status(200).send({ message })
+  })
+})
 
 router.get('/upload', authenticatedUser, (req: Request, res: Response) => {
   if (!res.locals?.session) return res.redirect('/')

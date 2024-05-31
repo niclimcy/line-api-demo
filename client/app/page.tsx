@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SiLine } from "@icons-pack/react-simple-icons";
-import { FileDownIcon } from "lucide-react";
+import { FileDownIcon, CloudUploadIcon } from "lucide-react";
 
 const BACKEND_URL = process.env.BACKEND_URL ?? "";
 
@@ -33,6 +33,12 @@ export default function Home() {
             <Link href={BACKEND_URL + "/users/export"}>
               <FileDownIcon className="size-5 mr-2" />
               Export all user data
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/upload-files">
+              <CloudUploadIcon className="size-5 mr-2" />
+              Upload files
             </Link>
           </Button>
         </CardContent>

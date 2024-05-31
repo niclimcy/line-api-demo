@@ -29,3 +29,31 @@ export async function sendMessage(prevState: any, formData: FormData) {
     resetKey: Date.now().toString(),
   };
 }
+
+export async function uploadImages(prevState: any, formData: FormData) {
+  console.log(formData);
+  const res = await fetch(`${process.env.BACKEND_URL}/upload-img`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    return {
+      success: false,
+      message: "Images not uploaded!",
+      resetKey: Date.now().toString(),
+    };
+  }
+
+  const message = await res.json();
+
+  return {
+    success: true,
+    message,
+    resetKey: Date.now().toString(),
+  };
+}
