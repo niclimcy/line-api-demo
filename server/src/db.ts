@@ -20,10 +20,3 @@ export function connectDB() {
   })
   return
 }
-
-export async function connectAuthDB(): Promise<MongoClient> {
-  const url = process.env.MONGODB_URI || 'mongodb://localhost/bookstore'
-
-  const client = new MongoClient(url)
-  return client.connect()
-}

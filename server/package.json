@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc & tailwindcss -i ./tailwind.css -o ./dist/public/styles.css",
-    "dev": "tsx watch --env-file=.env ./src/app.ts & tailwindcss -i ./tailwind.css -o ./src/public/styles.css -w",
+    "build": "tsc",
+    "dev": "tsx watch --env-file=.env ./src/app.ts",
     "format": "prettier ./src --write",
     "lint": "eslint ./src"
   },
@@ -41,7 +41,6 @@
     "globals": "^15.3.0",
     "prettier": "3.2.5",
     "prettier-plugin-ejs": "^1.0.3",
-    "tailwindcss": "^3.4.3",
     "tsx": "^4.11.2",
     "typescript-eslint": "^7.12.0"
   },
