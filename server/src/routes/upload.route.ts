@@ -1,8 +1,5 @@
 import { Router, type Response, type Request } from 'express'
-import {
-  authorizationRequired,
-  authenticatedUser,
-} from '../middleware/auth.middleware'
+import { authorizationRequired } from '../middleware/auth.middleware'
 import crypto from 'node:crypto'
 import multer from 'multer'
 import mime from 'mime'
@@ -60,11 +57,12 @@ router.post(
   (req: Request, res: Response) => {
     csvUpload(req, res, function (err) {
       if (err) {
-        return res.redirect(`/upload?error=${encodeURI(err.message)}`)
+        const message = err.message ?? 'No file uploaded.'
+        return res.status(400).send({ message })
       }
 
-      const message = encodeURI('Your file has been uploaded.')
-      return res.redirect(`/upload?uploaded=${message}`)
+      const message = 'Your file has been uploaded.'
+      return res.status(200).send({ message })
     })
   }
 )
@@ -72,8 +70,7 @@ router.post(
 router.post('/upload-img', async (req: Request, res: Response) => {
   imgUpload(req, res, async function (err) {
     if (err || !req?.files) {
-      const message = encodeURI(err.message ?? 'No file uploaded.')
-      console.log(err)
+      const message = err.message ?? 'No file uploaded.'
       return res.status(400).send({ message })
     }
 
@@ -92,26 +89,6 @@ router.post('/upload-img', async (req: Request, res: Response) => {
 
     return res.status(200).send({ message })
   })
-})
-
-router.get('/upload', authenticatedUser, (req: Request, res: Response) => {
-  if (!res.locals?.session) return res.redirect('/')
-
-  let uploaded = req.query?.uploaded ?? false
-  let error = req.query?.error ?? false
-
-  if (typeof uploaded === 'string') {
-    uploaded = decodeURI(uploaded)
-    if (uploaded.includes('https')) {
-      uploaded = uploaded.split(',')
-    }
-  }
-
-  if (typeof error === 'string') {
-    error = decodeURI(error)
-  }
-
-  return res.render('upload', { uploaded, error })
 })
 
 export default router
