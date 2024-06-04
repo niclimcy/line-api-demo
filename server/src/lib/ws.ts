@@ -10,7 +10,9 @@ function mapToExpressReq(request: IncomingMessage): Request {
 
 export function handleWS(httpServer: Server) {
   const io = new WSServer(httpServer, {
-    /* options */
+    cors: {
+      origin: '*',
+    },
   })
 
   io.on('connection', async (socket) => {
