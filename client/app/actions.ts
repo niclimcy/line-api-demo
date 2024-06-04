@@ -53,3 +53,27 @@ export async function uploadImages(prevState: any, formData: FormData) {
     resetKey: Date.now().toString(),
   };
 }
+
+export async function uploadCSV(prevState: any, formData: FormData) {
+  const res = await fetch(`${process.env.BACKEND_URL}/upload-csv`, {
+    method: "POST",
+    body: formData,
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    return {
+      success: false,
+      message: "CSV not uploaded!",
+      resetKey: Date.now().toString(),
+    };
+  }
+
+  const message: string = (await res.json()).message;
+
+  return {
+    success: true,
+    message,
+    resetKey: Date.now().toString(),
+  };
+}

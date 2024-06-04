@@ -1,5 +1,4 @@
 import { Router, type Response, type Request } from 'express'
-import { authorizationRequired } from '../middleware/auth.middleware'
 import crypto from 'node:crypto'
 import multer from 'multer'
 import mime from 'mime'
@@ -51,21 +50,17 @@ const imgUpload = multer({
   },
 }).array('images')
 
-router.post(
-  '/upload-csv',
-  authorizationRequired,
-  (req: Request, res: Response) => {
-    csvUpload(req, res, function (err) {
-      if (err) {
-        const message = err.message ?? 'No file uploaded.'
-        return res.status(400).send({ message })
-      }
+router.post('/upload-csv', (req: Request, res: Response) => {
+  csvUpload(req, res, function (err) {
+    if (err) {
+      const message = err.message ?? 'No file uploaded.'
+      return res.status(400).send({ message })
+    }
 
-      const message = 'Your file has been uploaded.'
-      return res.status(200).send({ message })
-    })
-  }
-)
+    const message = 'Your file has been uploaded.'
+    return res.status(200).send({ message })
+  })
+})
 
 router.post('/upload-img', async (req: Request, res: Response) => {
   imgUpload(req, res, async function (err) {
