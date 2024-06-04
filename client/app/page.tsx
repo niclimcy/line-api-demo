@@ -9,7 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SiLine } from "@icons-pack/react-simple-icons";
-import { FileDownIcon, CloudUploadIcon } from "lucide-react";
+import {
+  FileDownIcon,
+  CloudUploadIcon,
+  MessageSquareTextIcon,
+} from "lucide-react";
 
 const BACKEND_URL = process.env.BACKEND_URL ?? "";
 
@@ -41,8 +45,14 @@ export default function Home() {
               Upload files
             </Link>
           </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/chat">
+              <MessageSquareTextIcon className="size-5 mr-2" />
+              Chat with others
+            </Link>
+          </Button>
         </CardContent>
-        <CardFooter>Card Footer</CardFooter>
+        <CardFooter></CardFooter>
       </Card>
     </main>
   );
