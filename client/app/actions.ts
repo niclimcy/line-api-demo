@@ -31,13 +31,9 @@ export async function sendMessage(prevState: any, formData: FormData) {
 }
 
 export async function uploadImages(prevState: any, formData: FormData) {
-  console.log(formData);
   const res = await fetch(`${process.env.BACKEND_URL}/upload-img`, {
     method: "POST",
     body: formData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
     cache: "no-cache",
   });
 
@@ -49,7 +45,7 @@ export async function uploadImages(prevState: any, formData: FormData) {
     };
   }
 
-  const message = await res.json();
+  const message: string[] = (await res.json()).message;
 
   return {
     success: true,

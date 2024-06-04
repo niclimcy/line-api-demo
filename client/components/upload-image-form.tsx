@@ -14,7 +14,9 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { uploadImages } from "@/app/actions";
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
-import { SubmitButton } from "./submit-btn";
+import { SubmitButton } from "@/components/submit-btn";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const initialState = {
   message: "",
@@ -32,6 +34,30 @@ export function UploadImageForm() {
     }
   }, [formState.resetKey]);
 
+  function renderMessages() {
+    if (
+      Array.isArray(formState.message) &&
+      formState.message.every((item) => typeof item === "string")
+    ) {
+      return (
+        <>
+          <h3>Uploaded Image(s):</h3>
+          {formState.message.map((url, index) => (
+            <Button asChild variant="link" className="w-full">
+              <Link href={url} key={index}>
+                Image {index + 1}
+              </Link>
+            </Button>
+          ))}
+        </>
+      );
+    } else if (typeof formState.message === "string") {
+      return <p>{formState.message}</p>;
+    }
+
+    return null;
+  }
+
   return (
     <Card className="w-1/2">
       <CardHeader>
@@ -44,12 +70,12 @@ export function UploadImageForm() {
         <CardContent className="space-y-2">
           {formState.message && (
             <Alert variant={formState.success ? "default" : "destructive"}>
-              <AlertTitle>Image(s) uploaded!</AlertTitle>
+              <AlertTitle>{renderMessages()}</AlertTitle>
             </Alert>
           )}
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="picture">Image</Label>
-            <Input id="picture" type="file" name="imageFiles" multiple />
+            <Input id="picture" type="file" name="images" multiple />
           </div>
         </CardContent>
         <CardFooter>

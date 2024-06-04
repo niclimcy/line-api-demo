@@ -83,11 +83,11 @@ router.post('/upload-img', async (req: Request, res: Response) => {
       files = req.files.map((f) => f.path)
     }
 
-    let message = 'Your file has been uploaded.'
+    let message: string | string[] = 'Your file has been uploaded.'
 
     if (files.length > 0) {
       const uploads = await Promise.all(uploadImages(files))
-      message = uploads.map((image) => image.secure_url).join(',')
+      message = uploads.map((image) => image.secure_url)
     }
 
     return res.status(200).send({ message })

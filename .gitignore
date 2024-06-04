@@ -17,11 +17,11 @@ benchmarks/graphs
 .env
 
 # ignore tailwind generated stylesheet
-src/public/styles.css
+./src/public/styles.css
 
 # ignore uploads
-uploads/csv/*
-uploads/img/*
+./uploads/csv/*
+./uploads/img/*
 
 # ignore build
 dist
