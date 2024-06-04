@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { MongoClient } from 'mongodb'
 
 export function connectDB() {
   const url = process.env.MONGODB_URI || 'mongodb://localhost/bookstore'
