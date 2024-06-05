@@ -21,6 +21,16 @@ const userSchema = new Schema({
     type: Boolean,
     required: false,
   },
+  google: {
+    id: {
+      type: String,
+      required: false,
+    },
+    displayName: {
+      type: String,
+      required: false,
+    },
+  },
 })
 
 userSchema.plugin(passportLocalMongoose)

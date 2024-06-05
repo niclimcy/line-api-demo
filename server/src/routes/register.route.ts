@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express'
 import User from '../schemas/user.schema'
 
-const url = process.env.FRONTEND_URL || 'http://localhost:3001'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001'
 const router = Router()
 
 router.post('/create-user', async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ router.post('/create-user', async (req: Request, res: Response) => {
     return res.status(500)
   }
 
-  return res.redirect(url + '/')
+  return res.redirect(FRONTEND_URL + '/')
 })
 
 router.post('/get-otp', async (req: Request, res: Response) => {
@@ -59,7 +59,7 @@ router.post('/register-user', async (req: Request, res: Response) => {
 
   await user?.save()
 
-  return res.redirect(url + '/')
+  return res.redirect(FRONTEND_URL + '/')
 })
 
 export default router
