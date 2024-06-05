@@ -18,6 +18,7 @@ import authRoute from './routes/auth.route'
 const PORT = 3000
 const app = express()
 const httpServer = createServer(app)
+const MONGODB_URI = process.env.MONGODB_URI || ''
 
 // http request logger
 app.use(morgan('tiny'))
@@ -27,14 +28,14 @@ app.use(
   session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false, httpOnly: true },
     store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
+      mongoUrl: MONGODB_URI,
     }),
   })
 )
-app.use(passport.authenticate('session'))
+app.use(passport.session())
 
 app.use('/webhook', lineWebhookRoute)
 app.use(express.json())

@@ -8,7 +8,7 @@ declare global {
   namespace Express {
     interface User {
       _id: ObjectId
-      username: string
+      name: string
     }
   }
 }
@@ -55,8 +55,7 @@ passport.use(
 passport.serializeUser((user, done) => {
   let sessionUser = {
     _id: user._id,
-
-    username: user.username,
+    name: user.name,
   }
 
   done(null, sessionUser)
@@ -79,18 +78,12 @@ router.post(
   })
 )
 
-router.get(
-  '/login/federated/google',
-  passport.authenticate('google', {
-    successRedirect: FRONTEND_URL + '/',
-    failureRedirect: FRONTEND_URL + '/login',
-  })
-)
+router.get('/login/federated/google', passport.authenticate('google'))
 
 router.get(
   '/oauth2/redirect/google',
   passport.authenticate('google', {
-    failureRedirect: '/login',
+    failureRedirect: FRONTEND_URL + '/login',
     failureMessage: true,
   }),
   function (req, res) {
@@ -99,13 +92,22 @@ router.get(
 )
 
 // Logout route.
-router.post('/logout', (req, res, next) => {
+router.get('/logout', (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err)
     }
     res.redirect(FRONTEND_URL + '/')
   })
+})
+
+// Curent user route.
+router.get('/current-user', (req, res) => {
+  if (!req.user) {
+    return res.status(400).send({ error: 'Not signed in!' })
+  }
+
+  return res.status(200).send(req.user)
 })
 
 export default router
