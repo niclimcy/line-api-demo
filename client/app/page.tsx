@@ -43,8 +43,8 @@ export default async function Home() {
 
   if (!user) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
-        <Card className="w-1/2">
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-12 lg:p-24">
+        <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Book Store</CardTitle>
             <CardDescription>Not Logged In</CardDescription>
@@ -64,8 +64,8 @@ export default async function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <Card className="w-1/2">
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-12 lg:p-24">
+      <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Book Store</CardTitle>
           <CardDescription>{user.name}</CardDescription>
