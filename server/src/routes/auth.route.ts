@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import { Strategy as LineStrategy } from 'passport-line'
 import User from '../schemas/user.schema'
 import type { ObjectId } from 'mongoose'
 
@@ -16,11 +17,12 @@ declare global {
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001'
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || ''
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || ''
+const LINE_CHANNEL_ID = process.env.LINE_CHANNEL_ID || ''
+const LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || ''
 const router = Router()
 
 passport.use(User.createStrategy())
 
-// Configure Passport to use the Google strategy.
 passport.use(
   new GoogleStrategy(
     {
@@ -32,15 +34,46 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ 'google.id': profile.id })
+        let user = await User.findOne({
+          username: profile.id,
+          provider: 'google',
+        })
         if (!user) {
           user = new User({
+            username: profile.id,
             name: profile.displayName,
-            google: {
-              id: profile.id,
-              displayName: profile.displayName,
-            },
             registered: true,
+            provider: 'google',
+          })
+          await user.save()
+        }
+        return done(null, user)
+      } catch (err) {
+        return done(err)
+      }
+    }
+  )
+)
+
+passport.use(
+  new LineStrategy(
+    {
+      channelID: LINE_CHANNEL_ID,
+      channelSecret: LINE_CHANNEL_SECRET,
+      callbackURL: 'http://localhost:3000/auth/callback/line',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({
+          username: profile.id,
+          provider: 'line',
+        })
+        if (!user) {
+          user = new User({
+            username: profile.id,
+            name: profile.displayName,
+            registered: true,
+            provider: 'line',
           })
           await user.save()
         }
@@ -81,7 +114,7 @@ router.post(
 router.get('/login/federated/google', passport.authenticate('google'))
 
 router.get(
-  '/oauth2/redirect/google',
+  '/auth/callback/google',
   passport.authenticate('google', {
     failureRedirect: FRONTEND_URL + '/login',
     failureMessage: true,
@@ -89,6 +122,16 @@ router.get(
   function (req, res) {
     res.redirect(FRONTEND_URL + '/')
   }
+)
+
+router.get('/login/federated/line', passport.authenticate('line'))
+
+router.get(
+  '/auth/callback/line',
+  passport.authenticate('line', {
+    failureRedirect: FRONTEND_URL + '/login',
+    successRedirect: FRONTEND_URL + '/',
+  })
 )
 
 // Logout route.

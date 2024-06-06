@@ -4,6 +4,10 @@ import passportLocalMongoose from 'passport-local-mongoose'
 const { Schema } = mongoose
 
 const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -21,15 +25,9 @@ const userSchema = new Schema({
     type: Boolean,
     required: false,
   },
-  google: {
-    id: {
-      type: String,
-      required: false,
-    },
-    displayName: {
-      type: String,
-      required: false,
-    },
+  provider: {
+    type: String,
+    required: true,
   },
 })
 
