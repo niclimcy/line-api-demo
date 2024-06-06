@@ -2,6 +2,7 @@ import { Router } from 'express'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as LineStrategy } from 'passport-line'
+import { Strategy as FacebookStrategy } from 'passport-facebook'
 import User from '../schemas/user.schema'
 import type { ObjectId } from 'mongoose'
 
@@ -19,6 +20,9 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || ''
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || ''
 const LINE_CHANNEL_ID = process.env.LINE_CHANNEL_ID || ''
 const LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || ''
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || ''
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || ''
+
 const router = Router()
 
 passport.use(User.createStrategy())
@@ -85,6 +89,36 @@ passport.use(
   )
 )
 
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: FACEBOOK_APP_ID,
+      clientSecret: FACEBOOK_APP_SECRET,
+      callbackURL: 'http://localhost:3000/auth/callback/facebook',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({
+          username: profile.id,
+          provider: 'facebook',
+        })
+        if (!user) {
+          user = new User({
+            username: profile.id,
+            name: profile.displayName,
+            registered: true,
+            provider: 'facebook',
+          })
+          await user.save()
+        }
+        return done(null, user)
+      } catch (err) {
+        return done(err)
+      }
+    }
+  )
+)
+
 passport.serializeUser((user, done) => {
   let sessionUser = {
     _id: user._id,
@@ -129,6 +163,16 @@ router.get('/login/federated/line', passport.authenticate('line'))
 router.get(
   '/auth/callback/line',
   passport.authenticate('line', {
+    failureRedirect: FRONTEND_URL + '/login',
+    successRedirect: FRONTEND_URL + '/',
+  })
+)
+
+router.get('/login/federated/facebook', passport.authenticate('facebook'))
+
+router.get(
+  '/auth/callback/facebook',
+  passport.authenticate('facebook', {
     failureRedirect: FRONTEND_URL + '/login',
     successRedirect: FRONTEND_URL + '/',
   })
