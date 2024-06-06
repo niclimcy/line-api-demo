@@ -6,13 +6,9 @@ import { Strategy as FacebookStrategy } from 'passport-facebook'
 import User from '../schemas/user.schema'
 import type { ObjectId } from 'mongoose'
 
-declare global {
-  namespace Express {
-    interface User {
-      _id: ObjectId
-      name: string
-    }
-  }
+interface ExpressUser extends Express.User {
+  _id: ObjectId
+  name: string
 }
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3001'
@@ -32,7 +28,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: '/oauth2/redirect/google',
+      callbackURL: '/auth/callback/google',
       scope: ['profile'],
       state: true,
     },
@@ -64,7 +60,7 @@ passport.use(
     {
       channelID: LINE_CHANNEL_ID,
       channelSecret: LINE_CHANNEL_SECRET,
-      callbackURL: 'http://localhost:3000/auth/callback/line',
+      callbackURL: '/auth/callback/line',
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -94,7 +90,7 @@ passport.use(
     {
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
-      callbackURL: 'http://localhost:3000/auth/callback/facebook',
+      callbackURL: '/auth/callback/facebook',
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -120,15 +116,17 @@ passport.use(
 )
 
 passport.serializeUser((user, done) => {
-  let sessionUser = {
-    _id: user._id,
-    name: user.name,
+  const expressUser = user as ExpressUser
+
+  const sessionUser = {
+    _id: expressUser._id,
+    name: expressUser.name,
   }
 
   done(null, sessionUser)
 })
 
-passport.deserializeUser((sessionUser: Express.User, done) => {
+passport.deserializeUser((sessionUser: ExpressUser, done) => {
   // The sessionUser object is different from the user mongoose
   // collection
 

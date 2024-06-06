@@ -40,7 +40,7 @@ router.post('/get-otp', async (req: Request, res: Response) => {
 })
 
 router.post('/register-user', async (req: Request, res: Response) => {
-  const { name, email, address, otp } = req.body
+  const { email, address, otp } = req.body
 
   // Function to match otp
   if (otp != '123456') {
