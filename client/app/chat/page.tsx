@@ -1,25 +1,30 @@
 "use client";
 import { useState, useEffect, useRef, FormEvent, ChangeEvent } from "react";
 import io from "socket.io-client";
-const socket = io("http://localhost:3000", { withCredentials: true });
 
 export default function Chat() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<any>(null);
 
   useEffect(() => {
+    socketRef.current = io("http://localhost:3000", { withCredentials: true });
+
     function onConnect() {
       setIsConnected(true);
     }
+
     function onDisconnect() {
       setIsConnected(false);
     }
+
     function onMessage(msg: string) {
       setMessages((prevMessages) => [...prevMessages, msg]);
     }
 
+    const socket = socketRef.current;
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("chat message", onMessage);
@@ -28,6 +33,7 @@ export default function Chat() {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("chat message", onMessage);
+      socket.close();
     };
   }, []);
 
@@ -41,7 +47,7 @@ export default function Chat() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input) {
-      socket.emit("chat message", input);
+      socketRef.current.emit("chat message", input);
       setInput("");
     }
   };
