@@ -4,13 +4,12 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Heading,
   Box,
   Flex,
+  Icon,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { Link } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
 import { SiLine } from "@icons-pack/react-simple-icons";
 import {
   FileDownIcon,
@@ -18,6 +17,7 @@ import {
   MessageSquareTextIcon,
   LogInIcon,
   LogOutIcon,
+  UserRoundPlusIcon,
 } from "lucide-react";
 import { UserSession } from "@/types";
 
@@ -45,55 +45,68 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
                 Actions
               </Heading>
               <Box>
-                <Link as={NextLink} href="/line-chat" passHref>
-                  <Button variant="outline" w="full" mb={2}>
-                    <SiLine style={{ marginRight: "0.5rem" }} size={20} />
-                    Message LINE users
-                  </Button>
-                </Link>
-                <Link
-                  as={NextLink}
-                  href={backendUrl + "/users/export"}
-                  passHref
+                <Button
+                  as={Link}
+                  href="/line-chat"
+                  variant="outline"
+                  w="full"
+                  mb={2}
                 >
-                  <Button variant="outline" w="full" mb={2}>
-                    <FileDownIcon style={{ marginRight: "0.5rem" }} size={20} />
-                    Export all user data
-                  </Button>
-                </Link>
-                <Link as={NextLink} href="/upload-files" passHref>
-                  <Button variant="outline" w="full" mb={2}>
-                    <CloudUploadIcon
-                      style={{ marginRight: "0.5rem" }}
-                      size={20}
-                    />
-                    Upload files
-                  </Button>
-                </Link>
-                <Link as={NextLink} href="/chat" passHref>
-                  <Button variant="outline" w="full" mb={2}>
-                    <MessageSquareTextIcon
-                      style={{ marginRight: "0.5rem" }}
-                      size={20}
-                    />
-                    Chat with others
-                  </Button>
-                </Link>
-                <Link as={NextLink} href={backendUrl + "/logout"} passHref>
-                  <Button variant="outline" w="full">
-                    <LogOutIcon style={{ marginRight: "0.5rem" }} size={20} />
-                    Logout
-                  </Button>
-                </Link>
+                  <Icon as={SiLine} boxSize={5} mr="2" />
+                  Message LINE users
+                </Button>
+                <Button
+                  as={Link}
+                  href={backendUrl + "/users/export"}
+                  variant="outline"
+                  w="full"
+                  mb={2}
+                >
+                  <Icon as={FileDownIcon} boxSize={5} mr="2" />
+                  Export all user data
+                </Button>
+                <Button
+                  as={Link}
+                  href="/upload-files"
+                  variant="outline"
+                  w="full"
+                  mb={2}
+                >
+                  <Icon as={CloudUploadIcon} boxSize={5} mr="2" />
+                  Upload files
+                </Button>
+                <Button
+                  as={Link}
+                  href="/chat"
+                  variant="outline"
+                  w="full"
+                  mb={2}
+                >
+                  <Icon as={MessageSquareTextIcon} boxSize={5} mr="2" />
+                  Chat with others
+                </Button>
+                <Button
+                  as={Link}
+                  href={backendUrl + "/logout"}
+                  variant="outline"
+                  w="full"
+                >
+                  <Icon as={LogOutIcon} boxSize={5} mr="2" />
+                  Logout
+                </Button>
               </Box>
             </>
           ) : (
-            <Link as={NextLink} href="/login" passHref>
-              <Button variant="outline" w="full">
-                <LogInIcon style={{ marginRight: "0.5rem" }} size={20} />
+            <>
+              <Button as={Link} href="/login" variant="outline" w="full" mb={2}>
+                <Icon as={LogInIcon} boxSize={5} mr="2" />
                 Log In
               </Button>
-            </Link>
+              <Button as={Link} href="/sign-up" variant="outline" w="full">
+                <Icon as={UserRoundPlusIcon} boxSize={5} mr="2" />
+                Sign Up Now
+              </Button>
+            </>
           )}
         </CardBody>
       </Card>

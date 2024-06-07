@@ -50,7 +50,7 @@ export function LineForm(props: LineFormProps) {
     >
       <Card maxW="md" w="full">
         <CardHeader>
-          <Icon as={SiLine} boxSize={8} width="full" />
+          <Icon as={SiLine} boxSize={7} width="full" />
           <Heading textAlign="center" size="md">
             Send LINE Message
           </Heading>

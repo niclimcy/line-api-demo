@@ -1,24 +1,39 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+"use client";
 
-const BACKEND_URL = process.env.BACKEND_URL ?? "";
+import {
+  FormControl,
+  FormLabel,
+  Button,
+  Input,
+  Grid,
+  Stack,
+} from "@chakra-ui/react";
 
-export function PasswordLogin() {
+type PasswordLoginProps = {
+  backendUrl: string;
+};
+
+export function PasswordLogin({ backendUrl }: PasswordLoginProps) {
   return (
-    <form action={BACKEND_URL + "/login/password"} method="POST">
-      <div className="grid w-full items-center gap-1.5">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          type="email"
-          id="email"
-          name="username"
-          placeholder="email@example.com"
-        />
-        <Label htmlFor="password">Password</Label>
-        <Input type="password" id="password" name="password" />
-        <Button type="submit">Login with Email</Button>
-      </div>
+    <form action={backendUrl + "/login/password"} method="POST">
+      <Grid templateColumns="1fr" gap={4} w="100%">
+        <Stack spacing={2} align="center">
+          <FormControl>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              type="email"
+              id="email"
+              name="username"
+              placeholder="email@example.com"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input type="password" id="password" name="password" />
+          </FormControl>
+          <Button type="submit">Login with Email</Button>
+        </Stack>
+      </Grid>
     </form>
   );
 }
