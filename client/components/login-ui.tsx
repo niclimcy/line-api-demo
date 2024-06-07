@@ -24,7 +24,7 @@ export default function LoginUI({ backendUrl }: LoginUIProps) {
         <CardHeader>
           <Heading size="lg">Login</Heading>
         </CardHeader>
-        <CardBody className="space-y-2">
+        <CardBody>
           <FederatedLogin backendUrl={backendUrl} />
           <Box position="relative" padding="6">
             <Divider />

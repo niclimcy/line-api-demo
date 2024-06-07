@@ -5,9 +5,10 @@ import {
   CardHeader,
   CardBody,
   Heading,
-  Box,
+  Text,
   Flex,
   Icon,
+  VStack,
 } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { SiLine } from "@icons-pack/react-simple-icons";
@@ -31,28 +32,21 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
     <Flex minH="100vh" align="center" justify="center" p={[6, 12, 24]}>
       <Card maxW="md" w="full">
         <CardHeader>
-          <Heading size="lg">Book Store</Heading>
-          {user ? (
-            <Heading size="sm">{user.name}</Heading>
-          ) : (
-            <Heading size="sm">Not Logged In</Heading>
-          )}
+          <Heading>Book Store</Heading>
+          <Text size="sm">{user ? user.name : "Not Logged In"}</Text>
         </CardHeader>
         <CardBody>
           {user ? (
             <>
-              <Heading size="md" mb={2}>
-                Actions
-              </Heading>
-              <Box>
+              <Heading size="md">Actions</Heading>
+              <VStack spacing={4}>
                 <Button
                   as={Link}
                   href="/line-chat"
                   variant="outline"
                   w="full"
-                  mb={2}
+                  leftIcon={<Icon as={SiLine} boxSize={5} />}
                 >
-                  <Icon as={SiLine} boxSize={5} mr="2" />
                   Message LINE users
                 </Button>
                 <Button
@@ -60,9 +54,8 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
                   href={backendUrl + "/users/export"}
                   variant="outline"
                   w="full"
-                  mb={2}
+                  leftIcon={<Icon as={FileDownIcon} boxSize={5} />}
                 >
-                  <Icon as={FileDownIcon} boxSize={5} mr="2" />
                   Export all user data
                 </Button>
                 <Button
@@ -70,9 +63,8 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
                   href="/upload-files"
                   variant="outline"
                   w="full"
-                  mb={2}
+                  leftIcon={<Icon as={CloudUploadIcon} boxSize={5} />}
                 >
-                  <Icon as={CloudUploadIcon} boxSize={5} mr="2" />
                   Upload files
                 </Button>
                 <Button
@@ -80,9 +72,8 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
                   href="/chat"
                   variant="outline"
                   w="full"
-                  mb={2}
+                  leftIcon={<Icon as={MessageSquareTextIcon} boxSize={5} />}
                 >
-                  <Icon as={MessageSquareTextIcon} boxSize={5} mr="2" />
                   Chat with others
                 </Button>
                 <Button
@@ -90,23 +81,33 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
                   href={backendUrl + "/logout"}
                   variant="outline"
                   w="full"
+                  leftIcon={<Icon as={LogOutIcon} boxSize={5} />}
                 >
-                  <Icon as={LogOutIcon} boxSize={5} mr="2" />
                   Logout
                 </Button>
-              </Box>
+              </VStack>
             </>
           ) : (
-            <>
-              <Button as={Link} href="/login" variant="outline" w="full" mb={2}>
-                <Icon as={LogInIcon} boxSize={5} mr="2" />
+            <VStack spacing={4}>
+              <Button
+                as={Link}
+                href="/login"
+                variant="outline"
+                w="full"
+                leftIcon={<Icon as={LogInIcon} boxSize={5} />}
+              >
                 Log In
               </Button>
-              <Button as={Link} href="/sign-up" variant="outline" w="full">
-                <Icon as={UserRoundPlusIcon} boxSize={5} mr="2" />
+              <Button
+                as={Link}
+                href="/sign-up"
+                variant="outline"
+                w="full"
+                leftIcon={<Icon as={UserRoundPlusIcon} boxSize={5} />}
+              >
                 Sign Up Now
               </Button>
-            </>
+            </VStack>
           )}
         </CardBody>
       </Card>

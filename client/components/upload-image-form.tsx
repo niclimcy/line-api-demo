@@ -2,21 +2,23 @@
 
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+  CardBody,
+  CardFooter,
+  Heading,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  Alert,
+  AlertTitle,
+  Button,
+} from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
 import { uploadImages } from "@/app/actions";
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
 import { SubmitButton } from "@/components/submit-btn";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 const initialState = {
   message: "",
@@ -43,10 +45,8 @@ export function UploadImageForm() {
         <>
           <h3>Uploaded Image(s):</h3>
           {formState.message.map((url, index) => (
-            <Button asChild variant="link" className="w-full">
-              <Link href={url} key={index}>
-                Image {index + 1}
-              </Link>
+            <Button as={Link} href={url} key={index} variant="link" w="100%">
+              Image {index + 1}
             </Button>
           ))}
         </>
@@ -59,25 +59,25 @@ export function UploadImageForm() {
   }
 
   return (
-    <Card className="w-1/2">
+    <Card maxW="md" w="full">
       <CardHeader>
-        <CardTitle>Upload Images</CardTitle>
-        <CardDescription>
+        <Heading>Upload Images</Heading>
+        <Text size="sm">
           Upload images to cloudinary through express backend
-        </CardDescription>
+        </Text>
       </CardHeader>
       <form action={formAction} ref={formRef}>
-        <CardContent className="space-y-2">
+        <CardBody>
           {formState.message && (
             <Alert variant={formState.success ? "default" : "destructive"}>
               <AlertTitle>{renderMessages()}</AlertTitle>
             </Alert>
           )}
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="picture">Image</Label>
+          <FormControl>
+            <FormLabel htmlFor="picture">Image</FormLabel>
             <Input id="picture" type="file" name="images" multiple />
-          </div>
-        </CardContent>
+          </FormControl>
+        </CardBody>
         <CardFooter>
           <SubmitButton>Upload Images</SubmitButton>
         </CardFooter>

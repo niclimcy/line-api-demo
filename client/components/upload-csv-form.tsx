@@ -2,15 +2,17 @@
 
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+  CardBody,
+  CardFooter,
+  Heading,
+  Text,
+  FormControl,
+  FormLabel,
+  Input,
+  Alert,
+  AlertTitle,
+} from "@chakra-ui/react";
 import { uploadCSV } from "@/app/actions";
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
@@ -33,25 +35,23 @@ export function UploadCSVForm() {
   }, [formState.resetKey]);
 
   return (
-    <Card className="w-1/2">
+    <Card maxW="md" w="full">
       <CardHeader>
-        <CardTitle>Upload CSV</CardTitle>
-        <CardDescription>
-          Upload one CSV file at a time to express backend
-        </CardDescription>
+        <Heading>Upload CSV</Heading>
+        <Text size="sm">Upload one CSV file at a time to express backend</Text>
       </CardHeader>
       <form action={formAction} ref={formRef}>
-        <CardContent className="space-y-2">
+        <CardBody>
           {formState.message && (
             <Alert variant={formState.success ? "default" : "destructive"}>
               <AlertTitle>{formState.message}</AlertTitle>
             </Alert>
           )}
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="csvFile">CSV File</Label>
+          <FormControl>
+            <FormLabel htmlFor="csvFile">CSV File</FormLabel>
             <Input id="csvFile" type="file" name="csv" />
-          </div>
-        </CardContent>
+          </FormControl>
+        </CardBody>
         <CardFooter>
           <SubmitButton>Upload CSV</SubmitButton>
         </CardFooter>

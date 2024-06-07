@@ -1,11 +1,16 @@
+"use client";
+
+import { Flex, Stack } from "@chakra-ui/react";
 import { UploadImageForm } from "@/components/upload-image-form";
 import { UploadCSVForm } from "@/components/upload-csv-form";
 
-export default async function UploadFile() {
+export default function UploadFile() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 space-y-8">
-      <UploadCSVForm />
-      <UploadImageForm />
-    </main>
+    <Flex minH="100vh" align="center" justify="center" p={[6, 12, 24]}>
+      <Stack direction="column" spacing={8} width="100%" maxW="md">
+        <UploadCSVForm />
+        <UploadImageForm />
+      </Stack>
+    </Flex>
   );
 }
