@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 type SubmitButtonProps = {
@@ -12,7 +12,7 @@ export function SubmitButton(props: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" isLoading={pending} colorScheme="blue">
       {props.children}
     </Button>
   );

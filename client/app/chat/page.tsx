@@ -1,6 +1,15 @@
 "use client";
 import { useState, useEffect, useRef, FormEvent, ChangeEvent } from "react";
 import io from "socket.io-client";
+import {
+  Box,
+  Flex,
+  Input,
+  Button,
+  VStack,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
 
 export default function Chat() {
   const [isConnected, setIsConnected] = useState(false);
@@ -57,49 +66,70 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex items-end m-0 font-sans min-h-screen">
-      <div className="flex flex-col justify-end w-full">
-        <div
-          id="messagesContainer"
-          className="w-full mx-auto p-4 overflow-y-auto overscroll-contain max-h-[90vh]"
-          ref={messagesContainerRef}
+    <Flex
+      minH="100vh"
+      alignItems="center"
+      justifyContent="center"
+      m={0}
+      fontFamily="sans-serif"
+      flexDirection="column"
+      px={{ base: 4, md: 0 }} // Add padding on smaller breakpoints
+    >
+      <Box
+        w={{ base: "full", md: "md", lg: "lg" }}
+        h="80vh"
+        overflowY="auto"
+        p={4}
+        ref={messagesContainerRef}
+        borderWidth={1}
+        borderRadius="lg"
+      >
+        <VStack spacing={4} alignItems="flex-start">
+          {messages.map((msg, index) => (
+            <HStack
+              key={index}
+              alignSelf="flex-end"
+              borderRadius="lg"
+              p={2}
+              bg="blue.100"
+            >
+              <Text>{msg}</Text>
+            </HStack>
+          ))}
+        </VStack>
+      </Box>
+      <Flex
+        as="form"
+        onSubmit={handleSubmit}
+        mt={4}
+        w={{ base: "full", md: "md", lg: "lg" }}
+        px={{ base: 4, md: 0 }} // Add padding on smaller breakpoints
+      >
+        <Input
+          autoComplete="off"
+          borderRadius="full"
+          px={4}
+          py={2}
+          flexGrow={1}
+          focusBorderColor="blue.500"
+          placeholder="Type your message..."
+          value={input}
+          onChange={handleInputChange}
+        />
+        <Button
+          type="submit"
+          bg="blue.500"
+          _hover={{ bg: "blue.600" }}
+          color="white"
+          fontWeight="semibold"
+          px={4}
+          py={2}
+          borderRadius="full"
+          ml={4}
         >
-          <ul id="messages" className="list-none m-0 p-0 space-y-4">
-            {messages.map((msg, index) => (
-              <li
-                key={index}
-                className="p-4 rounded-lg relative max-w-3/4 bg-blue-100 self-end text-left"
-              >
-                {msg}
-                <span className="text-xs text-gray-500 absolute bottom-0 right-2">
-                  {new Date().getHours()}:
-                  {new Date().getMinutes().toString().padStart(2, "0")}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <form
-          id="form"
-          onSubmit={handleSubmit}
-          className="bg-white p-4 flex items-center space-x-4 shadow-lg"
-        >
-          <input
-            id="input"
-            autoComplete="off"
-            className="border border-gray-300 rounded-full px-4 py-2 flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Type your message..."
-            value={input}
-            onChange={handleInputChange}
-          />
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full focus:outline-none"
-            type="submit"
-          >
-            Send
-          </button>
-        </form>
-      </div>
-    </div>
+          Send
+        </Button>
+      </Flex>
+    </Flex>
   );
 }

@@ -96,7 +96,6 @@ export default function HomeUI({ user, backendUrl }: HomeUIProps) {
             </Link>
           )}
         </CardBody>
-        <CardFooter></CardFooter>
       </Card>
     </Flex>
   );

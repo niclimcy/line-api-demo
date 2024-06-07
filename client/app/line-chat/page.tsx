@@ -16,9 +16,5 @@ async function getData(): Promise<LineUser[]> {
 export default async function LineChat() {
   const users = await getData();
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <LineForm users={users} />
-    </main>
-  );
+  return <LineForm users={users} />;
 }
