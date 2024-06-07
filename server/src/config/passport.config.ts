@@ -5,7 +5,7 @@ import { Strategy as FacebookStrategy } from 'passport-facebook'
 import User from '../schemas/user.schema'
 import type { ObjectId } from 'mongoose'
 
-interface ExpressUser extends Express.User {
+export interface ExpressUser extends Express.User {
   _id: ObjectId
   name: string
 }

@@ -24,17 +24,16 @@ const MONGODB_URI = process.env.MONGODB_URI || ''
 app.use(morgan('tiny'))
 
 // express-session
-app.use(
-  session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, httpOnly: true },
-    store: MongoStore.create({
-      mongoUrl: MONGODB_URI,
-    }),
-  })
-)
+const sessionMiddleware = session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, httpOnly: true },
+  store: MongoStore.create({
+    mongoUrl: MONGODB_URI,
+  }),
+})
+app.use(sessionMiddleware)
 app.use(passport.session())
 
 app.use('/webhook', lineWebhookRoute)
@@ -53,7 +52,7 @@ app.set('trust proxy', true)
 connectDB()
 
 // handle socketio connections
-handleWS(httpServer)
+handleWS(httpServer, sessionMiddleware)
 
 // start the Express server
 httpServer.listen(PORT, async () => {
